@@ -1,6 +1,9 @@
 /* Análise relativa ao tom: pertencimento, grau e cifra romana. */
 import { chordById, outerRing, type Chord } from './chords';
+import { QUALITIES } from './qualities';
 import { DEGREES, mod24 } from './theory';
+
+const MAJOR_SCALE = [0, 2, 4, 5, 7, 9, 11];
 
 /** `key` é a classe de altura da tônica maior. */
 export const keySlot = (key: number) => chordById['M' + key].slot;
@@ -12,6 +15,8 @@ export function keyWindow(key: number): Set<number> {
 }
 
 export function inKey(c: Chord, key: number): boolean {
+  // vocabulário: todas as notas na escala maior do tom
+  if (c.ring === 3) return c.pcs.every((p) => MAJOR_SCALE.includes((p - key + 12) % 12));
   const w = keyWindow(key);
   if (c.ring === 0) return w.has(c.slot);
   if (c.kind === 'dom') return w.has(chordById[c.target].slot);
@@ -20,12 +25,13 @@ export function inKey(c: Chord, key: number): boolean {
 
 function degree(c: Chord, key: number): string {
   let d: string = DEGREES[(c.root - key + 12) % 12];
-  if (c.kind === 'min') d = d.replace(/[IV]+/, (s) => s.toLowerCase());
+  if (c.kind === 'min' || (c.ring === 3 && c.kind === 'dim')) d = d.replace(/[IV]+/, (s) => s.toLowerCase());
   return d;
 }
 
 export function numeral(c: Chord, key: number): string {
   if (c.ring === 0) return degree(c, key);
+  if (c.ring === 3) return degree(c, key) + QUALITIES[c.quality].numeral;
   if (c.kind === 'dom') {
     const d = degree(chordById[c.target], key);
     return d === 'I' ? 'V7' : 'V7/' + d;

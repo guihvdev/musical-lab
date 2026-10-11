@@ -1,0 +1,1 @@
+export { mountStudySidebar } from './StudySidebar';

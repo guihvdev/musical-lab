@@ -13,13 +13,6 @@ export const spell = (pc: number, group: number) => (group >= 1 && group <= 7 ? 
 
 export type ChordKind = 'maj' | 'min' | 'dom' | 'dim';
 
-export const INTERVALS: Record<ChordKind, readonly number[]> = {
-  maj: [0, 4, 7],
-  min: [0, 3, 7],
-  dom: [0, 4, 7, 10],
-  dim: [0, 3, 6, 9],
-};
-
 /** Variável CSS da cor de cada tipo de acorde. */
 export const KIND_COLOR: Record<ChordKind, string> = {
   maj: '--maj',

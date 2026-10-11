@@ -1,8 +1,12 @@
 import type { Chord, ChordKind } from '@/core/harmony';
 
 export const CENTER = 500;
-export const RING_RADIUS: Record<Chord['ring'], number> = { 0: 440, 1: 342, 2: 250 };
+export const RING_RADIUS: Record<Chord['ring'], number> = { 0: 440, 1: 342, 2: 250, 3: 192 };
 export const NODE_RADIUS: Record<ChordKind, number> = { maj: 36, min: 36, dom: 29, dim: 27 };
+/** Raio dos nós do anel de vocabulário (espaçados de 18°, ver layoutVocabulary). */
+const VOCAB_RADIUS = 23;
+
+export const nodeRadius = (c: Chord) => (c.ring === 3 ? VOCAB_RADIUS : NODE_RADIUS[c.kind]);
 
 export type Point = [number, number];
 
@@ -38,8 +42,8 @@ export function edgePath(a: Chord, pa: Point, b: Chord, pb: Point): string {
     const l = Math.hypot(vx, vy) || 1;
     return [px + (vx / l) * r, py + (vy / l) * r];
   };
-  const [sx, sy] = shrink(x0, y0, NODE_RADIUS[a.kind] + 2);
-  const [ex, ey] = shrink(x1, y1, NODE_RADIUS[b.kind] + 5);
+  const [sx, sy] = shrink(x0, y0, nodeRadius(a) + 2);
+  const [ex, ey] = shrink(x1, y1, nodeRadius(b) + 5);
   return `M${f(sx)},${f(sy)} Q${f(cx)},${f(cy)} ${f(ex)},${f(ey)}`;
 }
 

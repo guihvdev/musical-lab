@@ -1,6 +1,7 @@
-import { suggestionsFor, type LayerState, type Suggestion } from '@/core/harmony';
+import { baseGraph, chordById, suggestionsFor, type HarmonyGraph, type LayerState, type Suggestion } from '@/core/harmony';
+import { nextInProgression, scaleFor, type ActiveScale, type ResolvedStudy } from '@/core/study';
 import { EventBus } from '@/shared/events';
-import { loadLayers } from './persistence';
+import { loadLayers, loadLibrary, type SavedProgression } from './persistence';
 
 export interface AppState {
   /** Classe de altura da tônica maior. */
@@ -18,10 +19,30 @@ export interface AppState {
   layers: LayerState;
   playing: boolean;
   bpm: number;
-  /** Derivado em cada render a partir de `current`, `layers` e `key`. */
-  suggestions: Suggestion[];
   /** Notas pressionadas no teclado MIDI. */
   liveNotes: Set<number>;
+
+  /** Estudo ativo (null = modo Livre) e a variação escolhida. */
+  studyId: string | null;
+  variantId: string | null;
+  /** Estudo interpretado para o tom atual; refeito a cada troca de modo, variação ou tom. */
+  study: ResolvedStudy | null;
+  /** Progressão-modelo em uso e os ids com que foi carregada na trilha. */
+  activeProgression: number;
+  loadedProgression: string[] | null;
+  /** Nós e arestas ativos (fixos + vocabulário do estudo). */
+  graph: HarmonyGraph;
+
+  /** Modo foco: só o grafo e o teclado ficam visíveis. */
+  focus: boolean;
+  /** Progressões salvas pelo usuário. */
+  library: SavedProgression[];
+  /** Id da progressão salva aberta na trilha para edição (null = trilha livre). */
+  editing: string | null;
+
+  /** Derivados em cada render. */
+  suggestions: Suggestion[];
+  scale: ActiveScale | null;
 }
 
 export const state: AppState = {
@@ -34,8 +55,18 @@ export const state: AppState = {
   layers: loadLayers(),
   playing: false,
   bpm: 84,
-  suggestions: [],
   liveNotes: new Set(),
+  studyId: null,
+  variantId: null,
+  study: null,
+  activeProgression: 0,
+  loadedProgression: null,
+  graph: baseGraph,
+  focus: false,
+  library: loadLibrary(),
+  editing: null,
+  suggestions: [],
+  scale: null,
 };
 
 type Listener = (s: AppState) => void;
@@ -49,7 +80,17 @@ export function subscribe(fn: Listener): () => void {
 
 /** Recalcula os derivados e redesenha todas as features inscritas. */
 export function render(): void {
-  state.suggestions = suggestionsFor(state.current, state.layers, state.key);
+  const { study, current } = state;
+  state.suggestions = suggestionsFor(current, {
+    graph: state.graph,
+    layers: state.layers,
+    fieldKey: study?.fieldKey ?? state.key,
+    next: study
+      ? nextInProgression(study.progressions[state.activeProgression], state.progression, state.position, current)
+      : undefined,
+    focus: study?.focus,
+  });
+  state.scale = study && current ? scaleFor(study, chordById[current]) : null;
   listeners.forEach((fn) => fn(state));
 }
 

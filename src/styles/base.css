@@ -16,7 +16,6 @@ body {
   font-family: var(--f-body);
   font-size: 14px;
   line-height: 1.45;
-  padding-inline: 16px;
   background: radial-gradient(1200px 800px at 35% 30%, #121626 0%, var(--bg) 60%) fixed, var(--bg);
 }
 * {

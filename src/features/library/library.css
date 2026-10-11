@@ -1,0 +1,202 @@
+/* Barra acima da trilha */
+.lib-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+.lib-edit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1 1 260px;
+}
+.lib-lbl {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+.lib-name {
+  flex: 1;
+  min-width: 0;
+  max-width: 360px;
+  font: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+.lib-name:hover {
+  border-color: var(--line);
+}
+.lib-name:focus {
+  background: var(--bg);
+  border-color: var(--line2);
+  outline: none;
+}
+.lib-dirty {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  color: var(--dom);
+  white-space: nowrap;
+}
+.lib-dirty::before {
+  content: "● ";
+}
+.lib-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+.lib-count {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+.btn.pri .lib-count {
+  color: inherit;
+}
+.btn.danger {
+  color: var(--maj);
+}
+
+/* Diálogo "Minhas progressões" */
+.lib-dialog {
+  width: min(760px, calc(100vw - 32px));
+  max-height: min(84dvh, 900px);
+  padding: 18px 20px 20px;
+  background: var(--bg2);
+  color: var(--fg);
+  border: 1px solid var(--line2);
+  border-radius: 14px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+}
+.lib-dialog::backdrop {
+  background: rgba(5, 6, 10, 0.65);
+}
+.lib-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.lib-head h2 {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.lib-x {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--muted);
+}
+.lib-tools {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.lib-msg {
+  min-height: 1.45em;
+  margin: 8px 0;
+  font-size: 12px;
+  color: var(--min);
+}
+.lib-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lib-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+}
+.lib-item.on {
+  border-color: var(--line2);
+  box-shadow: inset 3px 0 0 var(--dom);
+}
+.li-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.li-name {
+  font-weight: 600;
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+.li-rename {
+  font: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--line2);
+  border-radius: 6px;
+  padding: 3px 8px;
+  max-width: 420px;
+}
+.li-meta {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+.li-meta b {
+  color: var(--dom);
+  font-weight: 500;
+}
+.li-chords {
+  font-family: var(--f-chord);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+.li-chords i {
+  font-family: var(--f-body);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--faint);
+}
+.li-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.li-actions .btn {
+  padding: 5px 10px;
+  font-size: 12.5px;
+}
+.li-dl {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 6px;
+  margin-right: auto;
+  font-size: 12px;
+  color: var(--muted);
+}

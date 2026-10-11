@@ -8,7 +8,7 @@
   touch-action: manipulation;
   user-select: none;
 }
-@media (max-width: 960px) {
+@container main (max-width: 928px) {
   .graph {
     max-width: 100%;
   }
@@ -35,6 +35,13 @@
 .edge.t-cad,
 .edge.t-tt {
   stroke-dasharray: 6 5;
+}
+.edge.t-std {
+  stroke-dasharray: 1 5;
+  stroke-linecap: round;
+}
+.edge.t-std.hot {
+  stroke-width: 3;
 }
 .has-cur .edge:not(.hot) {
   opacity: 0.06;
@@ -88,6 +95,36 @@
 }
 .node.cur .halo {
   opacity: 0.55;
+}
+
+/* Funções em foco do estudo: anel tracejado claro, menos esmaecidas quando há acorde atual */
+.focus-ring {
+  fill: none;
+  stroke: var(--fg);
+  stroke-width: 2;
+  stroke-dasharray: 3 5;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.node.focus .focus-ring {
+  opacity: 0.75;
+}
+.has-cur .node.focus:not(.sugg):not(.cur) {
+  opacity: 0.7;
+}
+
+/* Anel de vocabulário (estudos) */
+.ringguide.vocab {
+  display: none;
+}
+.has-vocab .ringguide.vocab {
+  display: inline;
+}
+.node.vocab circle.ring {
+  stroke-width: 2.5;
+}
+.node.vocab .badge text {
+  font-size: 11px;
 }
 .halo {
   opacity: 0;

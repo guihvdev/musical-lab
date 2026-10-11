@@ -1,4 +1,4 @@
-export type TransitionKind = 'res' | 'dia' | 'sec' | 'cad' | 'dim' | 'emp' | 'tt';
+export type TransitionKind = 'res' | 'dia' | 'sec' | 'cad' | 'dim' | 'emp' | 'tt' | 'std';
 
 export interface TransitionType {
   k: TransitionKind;
@@ -17,6 +17,8 @@ export const TRANSITION_TYPES: readonly TransitionType[] = [
   { k: 'dim', label: 'Diminuto de passagem', desc: 'passagem cromática', on: true },
   { k: 'emp', label: 'Empréstimo modal', desc: 'do tom homônimo menor', on: true },
   { k: 'tt', label: 'Substituto trítono', desc: 'subV7', on: false },
+  // só existe com um estudo ativo: liga os acordes consecutivos das progressões-modelo
+  { k: 'std', label: 'Caminho do estudo', desc: 'progressão-modelo', on: false },
 ];
 
 export const TRANSITION_INDEX = Object.fromEntries(TRANSITION_TYPES.map((t, i) => [t.k, i])) as Record<

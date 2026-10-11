@@ -29,3 +29,7 @@ export function qs<T extends Element = HTMLElement>(root: ParentNode, selector: 
 }
 
 export const prefersReducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/** Escapa texto do usuário para interpolar em markup. */
+export const escapeHtml = (s: string) =>
+  s.replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]!);

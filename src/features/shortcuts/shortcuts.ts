@@ -1,13 +1,21 @@
-import { pick, replay, shiftKey, state, undo } from '@/core/store';
+import { pick, replay, saveTrail, setFocus, shiftKey, state, undo } from '@/core/store';
 
 /**
- * 1–9 toca a sugestão · Espaço repete · Backspace desfaz · [ ] muda o tom por quintas.
- * Ignorado em campos de formulário e com modificadores.
+ * 1–9 toca a sugestão · Espaço repete · Backspace desfaz · [ ] muda o tom por quintas ·
+ * F liga/desliga o modo foco (Esc sai) · Ctrl/⌘+S salva a trilha.
+ * Ignorado em campos de formulário, em diálogos e com modificadores.
  */
 export function initShortcuts(): void {
   document.addEventListener('keydown', (e) => {
     const target = e.target as Element;
-    if (target.matches('input') || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (target.matches('input, textarea, select') || target.closest('dialog')) return;
+
+    if ((e.metaKey || e.ctrlKey) && !e.altKey && e.key.toLowerCase() === 's') {
+      e.preventDefault();
+      if (state.editing || state.progression.length) saveTrail();
+      return;
+    }
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
 
     if (/^[1-9]$/.test(e.key)) {
       const s = state.suggestions[Number(e.key) - 1];
@@ -23,6 +31,10 @@ export function initShortcuts(): void {
       undo();
     } else if (e.key === ']' || e.key === '[') {
       shiftKey(e.key === ']' ? 1 : -1);
+    } else if (e.key === 'f' || e.key === 'F') {
+      setFocus();
+    } else if (e.key === 'Escape' && state.focus) {
+      setFocus(false);
     }
   });
 }

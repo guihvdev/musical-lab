@@ -1,10 +1,13 @@
 /*
- * Grafo de acordes: 3 anéis concêntricos.
+ * Grafo de acordes: 3 anéis concêntricos fixos.
  *  - anel 0: maiores e relativos menores, alternados pelo ciclo de quintas (24 posições)
  *  - anel 1: dominantes (V7) de cada acorde do anel 0
  *  - anel 2: diminutos (vii°7) entre cada par maior/relativo
+ * O anel 3 (vocabulário dos estudos) é criado sob demanda em vocabulary.ts.
  */
-import { FLATS, INTERVALS, MAJ, MAJ_NAMES, MIN_NAMES, SHARPS, mod24, spell, type ChordKind } from './theory';
+import { BASE_QUALITY, QUALITIES, type Quality } from './qualities';
+import { spellChord } from './spelling';
+import { MAJ, MAJ_NAMES, MIN_NAMES, mod24, spell, type ChordKind } from './theory';
 import type { TransitionKind } from './transitions';
 
 interface ChordBase {
@@ -13,11 +16,11 @@ interface ChordBase {
   root: number;
   /** Posição angular (0–23, aceita frações). */
   slot: number;
-  ring: 0 | 1 | 2;
+  ring: 0 | 1 | 2 | 3;
   name: string;
-  /** Índice no ciclo de quintas (0 = F … 11 = Bb). */
-  group: number;
+  quality: Quality;
   pcs: number[];
+  /** Notas na grafia do próprio nome, na ordem de `pcs`. */
   noteNames: string[];
 }
 export interface TriadChord extends ChordBase {
@@ -35,7 +38,14 @@ export interface DiminishedChord extends ChordBase {
   /** [maior, relativo menor] */
   targets: [string, string];
 }
-export type Chord = TriadChord | DominantChord | DiminishedChord;
+/** Acorde de vocabulário de um estudo (maj7, m7, m7b5, 9, 13…), no anel 3. */
+export interface VocabChord extends ChordBase {
+  ring: 3;
+  /** Nó fixo cujas transições ele herda. */
+  base: string;
+}
+export type BaseChord = TriadChord | DominantChord | DiminishedChord;
+export type Chord = BaseChord | VocabChord;
 
 export interface Transition {
   from: string;
@@ -43,43 +53,39 @@ export interface Transition {
   type: TransitionKind;
 }
 
-type ChordSeed = Omit<TriadChord, 'pcs' | 'noteNames'> | Omit<DominantChord, 'pcs' | 'noteNames'> | Omit<DiminishedChord, 'pcs' | 'noteNames'>;
+type Derived = 'pcs' | 'noteNames' | 'quality';
+type ChordSeed = Omit<TriadChord, Derived> | Omit<DominantChord, Derived> | Omit<DiminishedChord, Derived>;
 
 /* ---------- Nós ---------- */
 const seeds: ChordSeed[] = [];
 MAJ.forEach((r, i) => {
   const mr = (r + 9) % 12;
-  seeds.push({ id: 'M' + r, kind: 'maj', root: r, slot: 2 * i, ring: 0, name: MAJ_NAMES[i], group: i });
-  seeds.push({ id: 'm' + mr, kind: 'min', root: mr, slot: 2 * i + 1, ring: 0, name: MIN_NAMES[i], group: i });
+  seeds.push({ id: 'M' + r, kind: 'maj', root: r, slot: 2 * i, ring: 0, name: MAJ_NAMES[i] });
+  seeds.push({ id: 'm' + mr, kind: 'min', root: mr, slot: 2 * i + 1, ring: 0, name: MIN_NAMES[i] });
 });
 MAJ.forEach((r, i) => {
   const mr = (r + 9) % 12;
   const dr = (r + 11) % 12;
-  seeds.push({ id: 'VM' + r, kind: 'dom', root: (r + 7) % 12, slot: 2 * i, ring: 1, target: 'M' + r, name: spell((r + 7) % 12, i) + '7', group: i });
-  seeds.push({ id: 'Vm' + mr, kind: 'dom', root: (mr + 7) % 12, slot: 2 * i + 1, ring: 1, target: 'm' + mr, name: spell((mr + 7) % 12, i) + '7', group: i });
-  seeds.push({ id: 'd' + r, kind: 'dim', root: dr, slot: 2 * i + 0.5, ring: 2, targets: ['M' + r, 'm' + r], name: (r === 6 ? 'E#' : spell(dr, i)) + '°', group: i });
+  seeds.push({ id: 'VM' + r, kind: 'dom', root: (r + 7) % 12, slot: 2 * i, ring: 1, target: 'M' + r, name: spell((r + 7) % 12, i) + '7' });
+  seeds.push({ id: 'Vm' + mr, kind: 'dom', root: (mr + 7) % 12, slot: 2 * i + 1, ring: 1, target: 'm' + mr, name: spell((mr + 7) % 12, i) + '7' });
+  seeds.push({ id: 'd' + r, kind: 'dim', root: dr, slot: 2 * i + 0.5, ring: 2, targets: ['M' + r, 'm' + r], name: (r === 6 ? 'E#' : spell(dr, i)) + '°' });
 });
 
-function noteNamesFor(s: ChordSeed, pcs: number[]): string[] {
-  const triad = s.kind === 'maj' || s.kind === 'min';
-  const names = s.name.includes('b')
-    ? FLATS
-    : s.name.includes('#')
-      ? SHARPS
-      : triad
-        ? s.group >= 1 && s.group <= 7
-          ? SHARPS
-          : FLATS
-        : SHARPS;
-  return pcs.map((p) => names[p]);
-}
+/** Classes de altura de uma qualidade sobre `root`, em ordem crescente de semitons. */
+export const pcsOf = (quality: Quality, root: number) => QUALITIES[quality].steps.map(([x]) => (x + root) % 12);
 
-export const chords: Chord[] = seeds.map((s) => {
-  const pcs = INTERVALS[s.kind].map((x) => (x + s.root) % 12);
-  return { ...s, pcs, noteNames: noteNamesFor(s, pcs) } as Chord;
+/** Nós dos anéis fixos. */
+export const chords: BaseChord[] = seeds.map((s) => {
+  const quality = BASE_QUALITY[s.kind];
+  return { ...s, quality, pcs: pcsOf(quality, s.root), noteNames: spellChord(s.name, quality) } as BaseChord;
 });
 
+/** Registro de todos os acordes já criados (fixos + vocabulário). */
 export const chordById: Record<string, Chord> = Object.fromEntries(chords.map((c) => [c.id, c]));
+
+export function registerChord(c: Chord): void {
+  chordById[c.id] = c;
+}
 
 /** Anel externo indexado por slot (0–23). */
 export const outerRing: TriadChord[] = [];

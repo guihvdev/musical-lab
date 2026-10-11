@@ -24,19 +24,31 @@ src/
 │   ├── events.ts            #   event bus tipado
 │   └── audio/synth.ts       #   sintetizador Web Audio
 ├── core/
-│   ├── harmony/             # domínio: teoria, grafo de acordes/transições, análise, voicing
-│   └── store/               # estado global, ações e persistência (localStorage)
+│   ├── harmony/             # domínio: teoria, qualidades, grafia, graus, escalas, grafo, voicing
+│   ├── study/               # STUDY_MODES (dados) + motor que interpreta cada modo
+│   └── store/               # estado global, ações, seletores, progressões salvas e persistência (localStorage)
 └── features/
     ├── chord-graph/         # grafo SVG circular, rotação por tom, destaque de arestas
     ├── key-selector/        # grade dos 12 tons
     ├── current-chord/       # cartão do acorde atual
     ├── suggestions/         # lista de próximos acordes (1–9)
     ├── transition-layers/   # liga/desliga tipos de transição
-    ├── progression/         # trilha de acordes + reprodução com bpm
+    ├── progression/         # trilha de acordes + reprodução com bpm + edição do acorde selecionado
+    ├── library/             # progressões salvas: salvar/editar, "Minhas progressões", baixar (MIDI, TXT, JSON) e importar
+    ├── focus-mode/          # modo foco (F): só o grafo e o teclado
     ├── piano/               # teclado na tela (voicing, baixo, notas MIDI)
     ├── midi/                # status e detecção de acordes via Web MIDI
-    └── shortcuts/           # atalhos de teclado
+    ├── shortcuts/           # atalhos de teclado
+    ├── study-sidebar/       # sidebar "Estudos" (desktop fixa/recolhível, gaveta no celular)
+    └── study-panel/         # painel do estudo: variação, foco, progressões, dicas
 ```
+
+### Estudos
+
+Cada modo é um objeto em [`src/core/study/modes.ts`](src/core/study/modes.ts). O motor
+([`engine.ts`](src/core/study/engine.ts)) só interpreta esse objeto: acordes, focos, progressões e
+regras de escala são escritos em graus relativos ao tom (`I7`, `ii7`, `IVΔ7`, `viiø7`, `#iv°7`, `bII7`,
+`V13`…), então funcionam em qualquer tom. Para criar um modo novo, acrescente um objeto ao array.
 
 Cada feature expõe sua API pública por `index.ts`, importa o próprio CSS e se inscreve no
 store (`subscribe`) para redesenhar. Interações efêmeras (hover de aresta, notas MIDI ao vivo)

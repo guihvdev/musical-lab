@@ -1,0 +1,70 @@
+.focus-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--panel);
+  border: 1px solid var(--line2);
+  border-radius: 99px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.focus-exit {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top, 0px));
+  right: 16px;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--panel);
+  border: 1px solid var(--line2);
+  border-radius: 99px;
+  padding: 5px 12px;
+  font-size: 13px;
+  color: var(--muted);
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.focus-exit:hover,
+.focus-exit:focus-visible {
+  opacity: 1;
+  color: var(--fg);
+}
+.focus-exit kbd {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  border: 1px solid var(--line2);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 0 5px;
+}
+
+/* Só o grafo e o teclado: o resto da página some */
+.shell.focus-mode .studies,
+.shell.focus-mode .studies-backdrop,
+.focus-mode .app > header,
+.focus-mode .next-col,
+.focus-mode .side,
+.focus-mode .dock > :not(.piano) {
+  display: none !important;
+}
+.focus-mode .app {
+  max-width: none;
+  padding-block: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "stage" "dock";
+  gap: 12px;
+}
+/* O grafo ocupa a altura que sobra acima do teclado (~190px com a faixa da escala) */
+.focus-mode .graph {
+  max-width: min(100%, calc(100dvh - 230px));
+  min-width: min(100%, 320px);
+}
+/* Telas estreitas: espaço para o botão de saída acima do grafo */
+@media (max-width: 720px) {
+  .focus-mode .app {
+    padding-top: 52px;
+  }
+}

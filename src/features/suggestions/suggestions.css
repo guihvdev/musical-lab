@@ -37,6 +37,15 @@
   text-align: center;
   line-height: 20px;
 }
+/* Prioridades do estudo: próximo da progressão (âmbar) e função em foco (contorno) */
+.sug.next .k {
+  background: var(--dom);
+}
+.sug.focus .k {
+  background: transparent;
+  color: var(--fg);
+  box-shadow: inset 0 0 0 1px var(--fg);
+}
 .sug .k.nok {
   background: transparent;
   color: var(--faint);

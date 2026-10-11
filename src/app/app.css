@@ -1,3 +1,16 @@
+.shell {
+  display: flex;
+  align-items: flex-start;
+  min-height: 100dvh;
+}
+/* Os breakpoints do layout consultam a largura que sobra ao lado da sidebar (container queries) */
+.main {
+  flex: 1;
+  min-width: 0;
+  padding-inline: 16px;
+  container: main / inline-size;
+}
+
 .app {
   /* Escala do grafo; a largura máxima cresce junto (1076px de palco + 2×340px de colunas + 2×24px de gap) */
   --graph-scale: 1;
@@ -109,7 +122,7 @@ h1 span {
 }
 
 /* Telas médias: a lista desce para baixo do painel, na coluna da direita */
-@media (max-width: 1360px) {
+@container main (max-width: 1328px) {
   .next-col {
     --next-list-height: 356px;
   }
@@ -123,7 +136,7 @@ h1 span {
   }
 }
 
-@media (max-width: 960px) {
+@container main (max-width: 928px) {
   .app {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "head" "stage" "next" "side" "dock";

@@ -24,6 +24,11 @@
   --e-dim: #e35df2;
   --e-tt: #62adff;
   --e-emp: #b99dff;
+  --e-std: #9be15d;
+
+  /* Camada de escala no teclado */
+  --sc-dot: #7d88b3;
+  --blue-note: #62adff;
 
   --f-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
   --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
