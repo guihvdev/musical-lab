@@ -1,0 +1,138 @@
+.graph {
+  width: 100%;
+  max-width: min(100%, 78vh);
+  aspect-ratio: 1;
+  height: auto;
+  display: block;
+  touch-action: manipulation;
+  user-select: none;
+}
+@media (max-width: 960px) {
+  .graph {
+    max-width: 100%;
+  }
+}
+
+/* Arestas */
+.edge {
+  fill: none;
+  stroke-width: 1.2;
+  opacity: 0.13;
+  transition: opacity 0.2s, stroke-width 0.2s;
+}
+.edge.hot {
+  opacity: 0.95;
+  stroke-width: 2.4;
+}
+.edge.focus {
+  opacity: 1;
+  stroke-width: 4;
+}
+.edge.off {
+  display: none;
+}
+.edge.t-cad,
+.edge.t-tt {
+  stroke-dasharray: 6 5;
+}
+.has-cur .edge:not(.hot) {
+  opacity: 0.06;
+}
+
+/* Nós */
+.node {
+  cursor: pointer;
+}
+.node circle.ring {
+  fill: var(--bg2);
+  stroke-width: 3;
+  transition: fill 0.2s;
+}
+.node text {
+  font-family: var(--f-chord);
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+.node.maj circle.ring { stroke: var(--maj); }
+.node.maj text { fill: var(--maj); }
+.node.min circle.ring { stroke: var(--min); }
+.node.min text { fill: var(--min); }
+.node.dom circle.ring { stroke: var(--dom); }
+.node.dom text { fill: var(--dom); }
+.node.dim circle.ring { stroke: var(--dim); }
+.node.dim text { fill: var(--dim); }
+.node:hover circle.ring {
+  fill: #1b2033;
+}
+.has-cur .node {
+  opacity: 0.38;
+  transition: opacity 0.2s;
+}
+.has-cur .node.sugg,
+.has-cur .node.cur {
+  opacity: 1;
+}
+.node.cur circle.ring {
+  stroke-width: 4;
+}
+.node.cur.maj circle.ring { fill: var(--maj); }
+.node.cur.min circle.ring { fill: var(--min); }
+.node.cur.dom circle.ring { fill: var(--dom); }
+.node.cur.dim circle.ring { fill: var(--dim); }
+.node.cur text {
+  fill: var(--bg) !important;
+  font-weight: 700;
+}
+.node.cur .halo {
+  opacity: 0.55;
+}
+.halo {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.badge circle {
+  fill: var(--fg);
+}
+.badge text {
+  fill: var(--bg);
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Fundo */
+.band {
+  fill: #ffffff;
+  opacity: 0.045;
+}
+.ringguide {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 2 6;
+}
+
+/* Centro */
+.ctr-name {
+  font-family: var(--f-chord);
+  font-weight: 700;
+  font-size: 110px;
+  fill: var(--fg);
+  text-anchor: middle;
+}
+.ctr-num {
+  font-family: var(--f-mono);
+  font-size: 26px;
+  fill: var(--dom);
+  text-anchor: middle;
+}
+.ctr-key {
+  font-family: var(--f-body);
+  font-size: 17px;
+  fill: var(--muted);
+  text-anchor: middle;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
