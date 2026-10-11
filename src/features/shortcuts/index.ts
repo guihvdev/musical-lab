@@ -1,0 +1,1 @@
+export { initShortcuts } from './shortcuts';
