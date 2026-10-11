@@ -1,5 +1,7 @@
 .app {
-  max-width: 1440px;
+  /* Escala do grafo; a largura máxima cresce junto (1076px de palco + 340px de painel + 24px de gap) */
+  --graph-scale: 1;
+  max-width: calc(1076px * var(--graph-scale) + 364px);
   margin: 0 auto;
   padding-block: 16px 28px;
   display: grid;
@@ -93,6 +95,12 @@ h1 span {
   border-radius: 2px;
   margin-right: 6px;
   vertical-align: -1px;
+}
+
+@media (min-width: 1600px) {
+  .app {
+    --graph-scale: 2;
+  }
 }
 
 @media (max-width: 960px) {

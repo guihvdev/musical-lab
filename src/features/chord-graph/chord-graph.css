@@ -1,6 +1,7 @@
 .graph {
   width: 100%;
-  max-width: min(100%, 78vh);
+  /* --graph-scale vem do layout (.app): 1 por padrão, 2 em telas grandes */
+  max-width: min(100%, calc(78vh * var(--graph-scale, 1)));
   aspect-ratio: 1;
   height: auto;
   display: block;
