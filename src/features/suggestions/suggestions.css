@@ -2,12 +2,21 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  /* altura de 9 itens (atalhos 1–9); o restante rola sem empurrar o layout.
+     Quando há conteúdo abaixo da lista, o layout fixa a altura via --next-list-height. */
+  height: var(--next-list-height, auto);
+  max-height: 356px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line2) transparent;
+  scrollbar-gutter: stable;
 }
 .sug {
   display: grid;
-  grid-template-columns: 22px 58px minmax(0, 1fr) auto;
+  grid-template-columns: 22px 44px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   text-align: left;
   background: transparent;
   border: 1px solid transparent;
@@ -52,7 +61,14 @@
   border-radius: 2px;
   flex: none;
 }
+.sug .tl {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .sug .r {
+  white-space: nowrap;
   font-family: var(--f-mono);
   font-size: 12px;
   color: var(--fg);

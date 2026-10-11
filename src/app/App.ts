@@ -14,13 +14,14 @@ import { html, qs } from '@/shared/dom';
 /** Progressão de exemplo em Dó: I – vi – V7/ii – ii – V7 – I */
 const EXAMPLE_PROGRESSION = ['M0', 'm9', 'Vm2', 'm2', 'VM0', 'M0'];
 
-/* Layout: grafo circular à esquerda, painel de decisão à direita, trilha + teclado embaixo */
+/* Layout: próximos acordes à esquerda, grafo circular no centro, painel de decisão à direita, trilha + teclado embaixo */
 const TEMPLATE = `
   <div class="app">
     <header>
       <h1>Teia <span>Harmônica</span></h1>
       <div class="tag">Escolha um acorde, veja para onde ele pode ir, toque o próximo.</div>
     </header>
+    <aside class="next-col"></aside>
     <div class="stage"></div>
     <aside class="side">
       <p class="hint"><kbd>1</kbd>–<kbd>9</kbd> toca a sugestão · <kbd>Espaço</kbd> repete · <kbd>⌫</kbd> desfaz · <kbd>[</kbd> <kbd>]</kbd> muda o tom por quintas</p>
@@ -45,12 +46,12 @@ export function mountApp(container: HTMLElement): void {
   const legend = qs(dock, '.legend');
 
   mountMidiStatus(header);
+  mountSuggestions(qs(app, '.next-col'));
   mountChordGraph(qs(app, '.stage'));
 
   const sidePanel = document.createDocumentFragment();
   mountKeySelector(sidePanel);
   mountCurrentChord(sidePanel);
-  mountSuggestions(sidePanel);
   mountTransitionLayers(sidePanel);
   side.insertBefore(sidePanel, hint);
 

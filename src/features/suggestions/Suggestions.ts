@@ -23,7 +23,7 @@ export function mountSuggestions(parent: Node): void {
       b.innerHTML =
         `<span class="k ${hasKey ? '' : 'nok'}">${hasKey ? i + 1 : '·'}</span>` +
         `<span class="c" style="color:var(${KIND_COLOR[chord.kind]})">${chord.name}</span>` +
-        `<span class="t"><i style="background:var(--e-${t.k})"></i>${t.label}</span>` +
+        `<span class="t" title="${t.label}"><i style="background:var(--e-${t.k})"></i><span class="tl">${t.label}</span></span>` +
         `<span class="r">${numeral(chord, s.key)}</span>`;
       b.addEventListener('click', () => pick(chord.id));
       b.addEventListener('mouseenter', () => bus.emit('edge-focus', { to: chord.id, on: true }));

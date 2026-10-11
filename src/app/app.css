@@ -1,15 +1,15 @@
 .app {
-  /* Escala do grafo; a largura máxima cresce junto (1076px de palco + 340px de painel + 24px de gap) */
+  /* Escala do grafo; a largura máxima cresce junto (1076px de palco + 2×340px de colunas + 2×24px de gap) */
   --graph-scale: 1;
-  max-width: calc(1076px * var(--graph-scale) + 364px);
+  max-width: calc(1076px * var(--graph-scale) + 728px);
   margin: 0 auto;
   padding-block: 16px 28px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-columns: 340px minmax(0, 1fr) 340px;
   grid-template-areas:
-    "head head"
-    "stage side"
-    "dock dock";
+    "head head head"
+    "next stage side"
+    "dock dock dock";
   gap: 16px 24px;
 }
 
@@ -42,6 +42,11 @@ h1 span {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+}
+
+.next-col {
+  grid-area: next;
+  min-width: 0;
 }
 
 .side {
@@ -97,15 +102,30 @@ h1 span {
   vertical-align: -1px;
 }
 
-@media (min-width: 1600px) {
+@media (min-width: 1000px) {
   .app {
-    --graph-scale: 2;
+    --graph-scale: 1.2;
+  }
+}
+
+/* Telas médias: a lista desce para baixo do painel, na coluna da direita */
+@media (max-width: 1360px) {
+  .next-col {
+    --next-list-height: 356px;
+  }
+  .app {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    grid-template-areas:
+      "head head"
+      "stage side"
+      "stage next"
+      "dock dock";
   }
 }
 
 @media (max-width: 960px) {
   .app {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "head" "stage" "side" "dock";
+    grid-template-areas: "head" "stage" "next" "side" "dock";
   }
 }
