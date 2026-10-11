@@ -1,0 +1,38 @@
+.layers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.layers label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: 4px 10px 4px 8px;
+  cursor: pointer;
+  color: var(--muted);
+}
+.layers input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.layers label i {
+  width: 16px;
+  height: 3px;
+  border-radius: 2px;
+  opacity: 0.35;
+}
+.layers label:has(input:checked) {
+  color: var(--fg);
+  border-color: var(--line2);
+  background: var(--panel);
+}
+.layers label:has(input:checked) i {
+  opacity: 1;
+}
+.layers label:has(input:focus-visible) {
+  outline: 2px solid var(--dom);
+}
