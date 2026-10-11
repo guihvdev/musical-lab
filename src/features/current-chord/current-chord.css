@@ -1,0 +1,31 @@
+.now {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.now .nm {
+  font-family: var(--f-chord);
+  font-weight: 700;
+  font-size: 54px;
+  line-height: 0.9;
+}
+.now .meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 4px;
+  min-width: 0;
+}
+.now .num {
+  font-family: var(--f-mono);
+  color: var(--dom);
+  font-size: 15px;
+}
+.now .notes {
+  color: var(--muted);
+  font-size: 13px;
+}

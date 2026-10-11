@@ -1,0 +1,1 @@
+export { mountCurrentChord } from './CurrentChord';
