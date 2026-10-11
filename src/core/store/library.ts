@@ -57,9 +57,9 @@ function nextName(): string {
   return `Progressão ${n}`;
 }
 
-function create(name: string, chords: SavedChord[]): SavedProgression {
+function create(name: string, chords: SavedChord[], ctx: Partial<ReturnType<typeof context>> = {}): SavedProgression {
   const now = Date.now();
-  const p: SavedProgression = { id: newId(), name, chords, ...context(), createdAt: now, updatedAt: now };
+  const p: SavedProgression = { id: newId(), name, chords, ...context(), ...ctx, createdAt: now, updatedAt: now };
   state.library.unshift(p);
   return p;
 }
@@ -106,6 +106,17 @@ export function openSaved(id: string): void {
   state.editing = p.id;
   state.voicing = null;
   loadProgression(p.chords.filter((c) => ensureChord(c.id, c.name)).map((c) => c.id));
+}
+
+/**
+ * Cria uma progressão a partir de acordes vindos de fora (ex.: detectados num áudio), no modo Livre, e a abre
+ * para edição.
+ */
+export function createFromChords(name: string, chords: SavedChord[], ctx: { key: number; bpm: number }): void {
+  const valid = chords.filter((c) => ensureChord(c.id, c.name));
+  const p = create(name.trim().slice(0, 80) || nextName(), valid, { ...ctx, studyId: null, variantId: null });
+  persist();
+  openSaved(p.id);
 }
 
 /* ---------- Biblioteca ---------- */

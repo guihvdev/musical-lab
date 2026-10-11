@@ -1,4 +1,13 @@
-import { baseGraph, chordById, suggestionsFor, type HarmonyGraph, type LayerState, type Suggestion } from '@/core/harmony';
+import {
+  baseGraph,
+  chordById,
+  extendGraph,
+  suggestionsFor,
+  type HarmonyGraph,
+  type LayerState,
+  type Suggestion,
+  type VocabChord,
+} from '@/core/harmony';
 import { nextInProgression, scaleFor, type ActiveScale, type ResolvedStudy } from '@/core/study';
 import { EventBus } from '@/shared/events';
 import { loadLayers, loadLibrary, type SavedProgression } from './persistence';
@@ -78,9 +87,27 @@ export function subscribe(fn: Listener): () => void {
   return () => listeners.delete(fn);
 }
 
+let freeVocab = '';
+let freeGraph: HarmonyGraph = baseGraph;
+
+/**
+ * Grafo do modo Livre: os fixos mais os acordes de vocabulário que estão na trilha (de uma progressão
+ * importada ou salva num estudo), para que tenham nó, arestas e sugestões. Refeito só quando esse conjunto muda.
+ */
+function freeModeGraph(): HarmonyGraph {
+  const vocab = [...new Set(state.progression)].map((id) => chordById[id]).filter((c): c is VocabChord => c?.ring === 3);
+  const ids = vocab.map((c) => c.id).sort().join('|');
+  if (ids !== freeVocab) {
+    freeVocab = ids;
+    freeGraph = extendGraph(vocab, []);
+  }
+  return freeGraph;
+}
+
 /** Recalcula os derivados e redesenha todas as features inscritas. */
 export function render(): void {
   const { study, current } = state;
+  if (!study) state.graph = freeModeGraph();
   state.suggestions = suggestionsFor(current, {
     graph: state.graph,
     layers: state.layers,
@@ -100,4 +127,6 @@ export const bus = new EventBus<{
   'edge-focus': { to: string; on: boolean };
   /** Notas MIDI pressionadas mudaram. */
   'live-notes': Set<number>;
+  /** Pede a abertura do diálogo "Gerar trilha de áudio" (`record`: já começa gravando pelo microfone). */
+  'audio-import': { record: boolean };
 }>();

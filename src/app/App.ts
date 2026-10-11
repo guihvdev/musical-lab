@@ -1,4 +1,5 @@
 import './app.css';
+import { mountAudioImport } from '@/features/audio-import';
 import { mountChordGraph } from '@/features/chord-graph';
 import { mountCurrentChord } from '@/features/current-chord';
 import { mountFocusMode } from '@/features/focus-mode';
@@ -31,7 +32,7 @@ const TEMPLATE = `
     <aside class="next-col"></aside>
     <div class="stage"></div>
     <aside class="side">
-      <p class="hint"><kbd>1</kbd>–<kbd>9</kbd> toca a sugestão · <kbd>Espaço</kbd> repete · <kbd>⌫</kbd> desfaz · <kbd>[</kbd> <kbd>]</kbd> muda o tom por quintas · <kbd>F</kbd> modo foco · <kbd>Ctrl</kbd>+<kbd>S</kbd> salva a trilha</p>
+      <p class="hint"><kbd>1</kbd>–<kbd>9</kbd> toca a sugestão · <kbd>Espaço</kbd> repete · <kbd>⌫</kbd> desfaz · <kbd>[</kbd> <kbd>]</kbd> muda o tom por quintas · <kbd>F</kbd> modo foco · <kbd>R</kbd> grava áudio · <kbd>Ctrl</kbd>+<kbd>S</kbd> salva a trilha</p>
     </aside>
     <section class="dock">
       <div class="legend">
@@ -74,6 +75,7 @@ export function mountApp(container: HTMLElement): void {
 
   mountStudySidebar(shell, header);
   mountFocusMode(shell, header);
+  mountAudioImport();
   initShortcuts();
   container.appendChild(shell);
 

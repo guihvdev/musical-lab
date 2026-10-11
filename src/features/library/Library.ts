@@ -1,5 +1,6 @@
 import './library.css';
 import {
+  bus,
   closeEditing,
   createSaved,
   deleteSaved,
@@ -49,6 +50,7 @@ export function mountLibrary(parent: Node): void {
         <button class="btn" data-action="save" type="button" title="Salvar (Ctrl+S)">Salvar trilha</button>
         <button class="btn" data-action="save-new" type="button" hidden>Salvar como nova</button>
         <button class="btn" data-action="close" type="button" hidden>Fechar</button>
+        <button class="btn lib-rec" data-action="record" type="button" title="Gravar pelo microfone e gerar a trilha (R)"><i aria-hidden="true"></i> Gravar</button>
         <button class="btn" data-action="library" type="button">Minhas progressões <span class="lib-count"></span></button>
       </div>
     </div>`);
@@ -60,6 +62,7 @@ export function mountLibrary(parent: Node): void {
       </div>
       <div class="lib-tools">
         <button class="btn pri" data-action="new" type="button">+ Nova progressão</button>
+        <button class="btn" data-action="audio" type="button">Gerar de áudio…</button>
         <button class="btn" data-action="import" type="button">Importar JSON</button>
         <button class="btn" data-action="export-all" type="button">Baixar todas</button>
         <input class="lib-file" type="file" accept=".json,application/json" hidden>
@@ -86,6 +89,7 @@ export function mountLibrary(parent: Node): void {
   saveNewBtn.addEventListener('click', saveTrailAsNew);
   closeBtn.addEventListener('click', () => canDiscard() && closeEditing());
   qs(bar, '[data-action="library"]').addEventListener('click', openDialog);
+  qs(bar, '[data-action="record"]').addEventListener('click', () => bus.emit('audio-import', { record: true }));
 
   const commitName = () => {
     if (state.editing) renameSaved(state.editing, nameInput.value);
@@ -225,6 +229,10 @@ export function mountLibrary(parent: Node): void {
     if (state.library.length) downloadLibrary(state.library);
   });
   qs(dialog, '[data-action="import"]').addEventListener('click', () => file.click());
+  qs(dialog, '[data-action="audio"]').addEventListener('click', () => {
+    dialog.close();
+    bus.emit('audio-import', { record: false });
+  });
   file.addEventListener('change', async () => {
     const f = file.files?.[0];
     file.value = '';

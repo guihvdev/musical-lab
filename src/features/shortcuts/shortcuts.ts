@@ -1,8 +1,8 @@
-import { pick, replay, saveTrail, setFocus, shiftKey, state, undo } from '@/core/store';
+import { bus, pick, replay, saveTrail, setFocus, shiftKey, state, undo } from '@/core/store';
 
 /**
  * 1–9 toca a sugestão · Espaço repete · Backspace desfaz · [ ] muda o tom por quintas ·
- * F liga/desliga o modo foco (Esc sai) · Ctrl/⌘+S salva a trilha.
+ * F liga/desliga o modo foco (Esc sai) · R grava pelo microfone e gera a trilha · Ctrl/⌘+S salva a trilha.
  * Ignorado em campos de formulário, em diálogos e com modificadores.
  */
 export function initShortcuts(): void {
@@ -33,6 +33,8 @@ export function initShortcuts(): void {
       shiftKey(e.key === ']' ? 1 : -1);
     } else if (e.key === 'f' || e.key === 'F') {
       setFocus();
+    } else if (e.key === 'r' || e.key === 'R') {
+      bus.emit('audio-import', { record: true });
     } else if (e.key === 'Escape' && state.focus) {
       setFocus(false);
     }

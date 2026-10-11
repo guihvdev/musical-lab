@@ -25,6 +25,7 @@ src/
 │   └── audio/synth.ts       #   sintetizador Web Audio
 ├── core/
 │   ├── harmony/             # domínio: teoria, qualidades, grafia, graus, escalas, grafo, voicing
+│   ├── audio-analysis/      # cromagrama, batidas, tom e acordes por batida (Viterbi); TS puro, roda no worker
 │   ├── study/               # STUDY_MODES (dados) + motor que interpreta cada modo
 │   └── store/               # estado global, ações, seletores, progressões salvas e persistência (localStorage)
 └── features/
@@ -35,6 +36,7 @@ src/
     ├── transition-layers/   # liga/desliga tipos de transição
     ├── progression/         # trilha de acordes + reprodução com bpm + edição do acorde selecionado
     ├── library/             # progressões salvas: salvar/editar, "Minhas progressões", baixar (MIDI, TXT, JSON) e importar
+    ├── audio-import/        # trilha aproximada de um arquivo ou gravação do microfone (R): análise em Web Worker + linha do tempo de revisão
     ├── focus-mode/          # modo foco (F): só o grafo e o teclado
     ├── piano/               # teclado na tela (voicing, baixo, notas MIDI)
     ├── midi/                # status e detecção de acordes via Web MIDI

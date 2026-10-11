@@ -6,7 +6,7 @@ import { render, state } from './state';
 
 const MAX_PROGRESSION = 40;
 /** Limite da trilha ao editar uma progressão salva (sem descartar o começo). */
-const MAX_SAVED = 128;
+export const MAX_SAVED = 128;
 
 /** Torna `id` o acorde atual, recalculando o voicing com condução de vozes. */
 export function setCurrent(id: string, play: boolean): void {
