@@ -1,0 +1,19 @@
+.keys12 {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+.keys12 button {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 0;
+  font-family: var(--f-chord);
+  font-weight: 600;
+  font-size: 17px;
+}
+.keys12 button[aria-pressed="true"] {
+  background: var(--maj);
+  border-color: var(--maj);
+  color: var(--bg);
+}
