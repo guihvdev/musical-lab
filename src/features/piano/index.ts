@@ -1,0 +1,1 @@
+export { mountPiano } from './Piano';

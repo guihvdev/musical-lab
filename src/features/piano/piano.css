@@ -1,0 +1,73 @@
+.kbwrap {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #07080c;
+  padding: 10px 10px 0;
+}
+.kb {
+  position: relative;
+  height: 120px;
+  min-width: 780px;
+  display: flex;
+}
+.wk {
+  flex: 1;
+  border: 1px solid #1b1e28;
+  border-top: none;
+  background: #e7e8ee;
+  border-radius: 0 0 5px 5px;
+  position: relative;
+  cursor: pointer;
+}
+.bk {
+  position: absolute;
+  top: 0;
+  height: 62%;
+  background: #15171f;
+  border-radius: 0 0 4px 4px;
+  z-index: 2;
+  cursor: pointer;
+  border: 1px solid #000;
+}
+.wk span,
+.bk span {
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  font-weight: 500;
+}
+.wk span { color: #0a0c12; }
+.bk span { color: #fff; }
+.wk.c0::after {
+  content: attr(data-o);
+  position: absolute;
+  bottom: -1px;
+  left: 3px;
+  font-family: var(--f-mono);
+  font-size: 9px;
+  color: #9aa0b2;
+}
+
+/* Mão direita (rh), baixo (bs) e notas MIDI ao vivo */
+.wk.rh,
+.bk.rh {
+  background: var(--kc);
+}
+.bk.rh span {
+  color: var(--bg);
+}
+.wk.bs {
+  background: linear-gradient(#e7e8ee 0 40%, var(--kc) 40%);
+}
+.bk.bs {
+  background: linear-gradient(#15171f 0 30%, var(--kc) 30%);
+}
+.wk.live,
+.bk.live {
+  box-shadow: inset 0 -8px 0 var(--min);
+}
