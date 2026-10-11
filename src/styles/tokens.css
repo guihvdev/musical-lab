@@ -1,0 +1,32 @@
+/* Paleta e tipografia: palco escuro */
+:root {
+  color-scheme: dark;
+  --bg: #0a0c12;
+  --bg2: #0f121b;
+  --panel: #131724;
+  --line: #242a3b;
+  --line2: #323a50;
+  --fg: #e9ebf3;
+  --muted: #8c93aa;
+  --faint: #5a6178;
+
+  /* Tipos de acorde */
+  --maj: #ff5c63;
+  --min: #3ddcc6;
+  --dom: #ffb23e;
+  --dim: #e35df2;
+
+  /* Tipos de transição */
+  --e-res: #eef0f8;
+  --e-dia: #8a97c4;
+  --e-sec: #ffb23e;
+  --e-cad: #ff8340;
+  --e-dim: #e35df2;
+  --e-tt: #62adff;
+  --e-emp: #b99dff;
+
+  --f-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-chord: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
